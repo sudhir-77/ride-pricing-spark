@@ -47,8 +47,26 @@ COVERAGE_MIN = 0.75
 
 # SHA-256 and row counts for the 2023 files. 2024 stays in ride_pricing.config
 # so the parent pins remain the single source for those four months.
-EXTRA_SHA256: dict[str, str] = {}
-EXTRA_ROWS: dict[str, int] = {}
+EXTRA_SHA256: dict[str, str] = {
+    "2023-05": "9bd7d1c557bb9d0413619ba296b4828b884852a70bd07f2230b83f080d9a8591",
+    "2023-06": "3e60e29b5df45683948b68acbfb503aa459d14162c610622585c6580fdbfc73a",
+    "2023-07": "98504ae351d920e9e0b61241f5707f90ee1588cfb199c378459234b5035805ab",
+    "2023-08": "84ce36a2f84fa14c12fd976c79a7d4f30c871f1782b08ca7c27bb76ab946e66b",
+    "2023-09": "091bf156bea5bb10bd217f5f12375f966f8789349af45d5ee4153e3e1e077a87",
+    "2023-10": "dc5f069476d350df802ed8120f3b39ec321c34cfa905381e87f608c78ca0c645",
+    "2023-11": "af203de0e73a92d640121f02a34326f25037d62380fc406237c87c2a4231ae58",
+    "2023-12": "ab4f4db11cb31484747f62eb507c13fcfaff290aaf59c13e6465dea0b1166b9c",
+}
+EXTRA_ROWS: dict[str, int] = {
+    "2023-05": 3513649,
+    "2023-06": 3307234,
+    "2023-07": 2907108,
+    "2023-08": 2824209,
+    "2023-09": 2846722,
+    "2023-10": 3522285,
+    "2023-11": 3339715,
+    "2023-12": 3376567,
+}
 
 
 def pins_for(month: str) -> tuple[str, int]:

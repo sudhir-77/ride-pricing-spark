@@ -17,8 +17,8 @@ DISTANCE_MAX = 100.0
 @dataclass(frozen=True)
 class QualityThresholds:
     max_null_rate: float = 0.01
-    max_fare_out_of_range_rate: float = 0.08
-    max_distance_out_of_range_rate: float = 0.20
+    max_fare_out_of_range_rate: float = 0.05
+    max_distance_out_of_range_rate: float = 0.01
     min_rows: int = 1
     exact_rows: dict[str, int] | None = None
 

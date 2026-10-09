@@ -44,6 +44,16 @@ def test_quality_rejects_a_short_month_and_a_bad_pin():
     assert any("pinned" in item for item in assess_month(_stats(), pinned))
 
 
+def test_every_spark_month_has_a_pinned_checksum():
+    from ride_pricing.year_config import SPARK_MONTHS, pins_for
+
+    assert len(SPARK_MONTHS) == 12
+    for month in SPARK_MONTHS:
+        digest, rows = pins_for(month)
+        assert len(digest) == 64
+        assert rows > 1_000_000
+
+
 def test_calendar_matches_duckdb_extract():
     import duckdb
 
