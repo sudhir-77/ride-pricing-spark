@@ -5,6 +5,10 @@ __pycache__/
 .pytest_cache/
 .cursor/
 mlruns/
+metastore_db/
+derby.log
+spark-warehouse/
+results/coverage.json
 *.pyc
 *.pyo
 *.pkl

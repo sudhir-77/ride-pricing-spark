@@ -128,6 +128,23 @@ def results_markdown(payload: dict) -> str:
             f"| Switchback absolute bias | {_num(switch['switchback_bias'])} |",
             f"| Naive user-level absolute bias | {_num(switch['naive_ab_bias'])} |",
             f"| Bias ratio (switchback / naive) | {_num(switch['bias_ratio'])} |",
+        ]
+    )
+    demand = payload["metrics"].get("demand_11m")
+    spark = payload["metrics"].get("spark")
+    if demand and spark:
+        lines.extend(
+            [
+                f"| April top-zone WAPE, 11-month LightGBM | {_num(demand['april_top50_wape'])} |",
+                f"| April top-zone WAPE, 11-month seasonal naive | {_num(demand['april_top50_wape_seasonal_naive'])} |",
+                f"| Parent April top-zone WAPE | {_num(demand['parent_april_top50_wape'])} |",
+                f"| Spark vs DuckDB match rate | {_num(spark['parity_match_rate'])} |",
+                f"| Spark ETL seconds | {spark['runtime_s']:.2f} |",
+                f"| Spark total trips | {int(spark['total_trips'])} |",
+            ]
+        )
+    lines.extend(
+        [
             f"| Runtime seconds | {payload['runtime_seconds']:.2f} |",
             f"| Peak RSS GiB | {payload['hardware']['peak_rss_gb']:.4f} |",
             "",
@@ -187,4 +204,45 @@ This project forecasts yellow-taxi pickups by zone and hour, then uses those for
 ## GitHub description
 
 Forecast NYC taxi zone-hour demand, optimize a simulated surge multiplier, and compare switchback experiments with a user-level A/B test.
+"""
+
+
+def render_extension_notes(payload: dict) -> str:
+    """Resume notes for the Spark extension. Every digit is formatted from metrics.json."""
+    spark = payload["metrics"]["spark"]
+    demand = payload["metrics"]["demand_11m"]
+    airflow = payload["metrics"]["airflow"]
+    forecast = payload["metrics"]["forecast"]
+
+    def r4(value: float) -> str:
+        return f"{float(value):.4f}"
+
+    trips = int(spark["total_trips"])
+    months = int(spark["n_months"])
+    match = r4(spark["parity_match_rate"])
+    wape_11 = r4(demand["april_top50_wape"])
+    naive_11 = r4(demand["april_top50_wape_seasonal_naive"])
+    history = int(demand["n_history_months"])
+    n_tasks = int(airflow["n_tasks"])
+    parent_wape = r4(forecast["april_top50_wape_lightgbm"])
+    return f"""# Resume notes
+
+## Draft bullets
+
+- Built a PySpark ETL over {trips} NYC taxi trips ({months} months) with data-quality checks, matching DuckDB features on {match} of overlapping zone-hour rows.
+- Defined the extract, validate, transform, train, and evaluate steps as an Airflow DAG ({n_tasks} tasks, statically validated) and ran the same tasks end to end with a local runner.
+- Retrained the demand model on {history} months of history at {wape_11} WAPE on held-out April 2024, versus {naive_11} for seasonal-naive.
+- Re-ran the parent DuckDB and LightGBM pipeline at {parent_wape} April top-zone WAPE on the same held-out month.
+
+## Skills and tools
+
+Python, SQL, PySpark, DuckDB, Airflow DAG definitions, LightGBM, MLflow, pandas, NumPy, pytest. Local-mode Spark ETL, feature parity checks, time-series forecasting, and static DAG validation with a local runner.
+
+## Project summary
+
+This project extends a zone-hour taxi demand model with a local PySpark cleaning and aggregation job over 12 months of TLC yellow trips. An Airflow DAG defines extract, validate, transform, train, and evaluate; a local runner executes those tasks, and the retrained model is scored on held-out April 2024.
+
+## GitHub description
+
+PySpark ETL for a year of NYC taxi trips, checked against DuckDB, with an Airflow DAG and an 11-month demand model.
 """
