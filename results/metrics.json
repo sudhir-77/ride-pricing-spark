@@ -1,5 +1,5 @@
 {
-  "project": "ride-pricing-marketplace",
+  "project": "ride-pricing-spark",
   "success_criteria": [
     {
       "name": "April zone-hour demand WAPE (top 50 zones)",
@@ -48,6 +48,54 @@
       "threshold": 1.598971516077846,
       "threshold_high": null,
       "passed": true
+    },
+    {
+      "name": "Spark vs. DuckDB feature parity on overlapping months",
+      "value": 1.0,
+      "op": ">=",
+      "threshold": 1.0,
+      "threshold_high": null,
+      "passed": true
+    },
+    {
+      "name": "Demand WAPE on held-out April 2024 with the 11-month model",
+      "value": 0.14510915817972433,
+      "op": "<=",
+      "threshold": 0.14612673860775385,
+      "threshold_high": null,
+      "passed": true
+    },
+    {
+      "name": "Pipeline throughput",
+      "value": 50.55,
+      "op": "<=",
+      "threshold": 1800.0,
+      "threshold_high": null,
+      "passed": true
+    },
+    {
+      "name": "Airflow DAG",
+      "value": 1.0,
+      "op": ">=",
+      "threshold": 1.0,
+      "threshold_high": null,
+      "passed": true
+    },
+    {
+      "name": "Parent project",
+      "value": 0.0,
+      "op": "<=",
+      "threshold": 0.02,
+      "threshold_high": null,
+      "passed": true
+    },
+    {
+      "name": "Test coverage of src/ and spark/",
+      "value": 0.8625678119349005,
+      "op": ">=",
+      "threshold": 0.75,
+      "threshold_high": null,
+      "passed": true
     }
   ],
   "metrics": {
@@ -84,19 +132,66 @@
       "naive_ab_bias": 4.796914548233538,
       "bias_ratio": 0.0023871802764791577,
       "treatment_multiplier": 0.85
-    }
+    },
+    "spark": {
+      "total_trips": 38419594,
+      "raw_rows": 38706556,
+      "cleaned_rows": 38419594,
+      "aggregated_rows": 2292624,
+      "runtime_s": 50.55,
+      "n_months": 12,
+      "parity_match_rate": 1.0,
+      "rows_spark": 755040,
+      "rows_duckdb": 755040,
+      "rows_matched": 755040,
+      "max_abs_diff": 0.0,
+      "months_compared": [
+        "2024-01",
+        "2024-02",
+        "2024-03",
+        "2024-04"
+      ]
+    },
+    "demand_11m": {
+      "april_top50_wape": 0.14510915817972433,
+      "april_top50_wape_seasonal_naive": 0.19296595644565825,
+      "parent_april_top50_wape": 0.14612673860775385,
+      "val_wape_lightgbm": 0.14768189742396734,
+      "val_wape_seasonal_naive": 0.18527970979495112,
+      "best_iteration": 398,
+      "n_top_zones": 50,
+      "n_history_months": 11,
+      "mlflow_run_id": "d24c692d3cda4eb7bccf9cefe4c4e68a"
+    },
+    "airflow": {
+      "dag_id": "nyc_taxi_demand",
+      "n_tasks": 5,
+      "acyclic": true,
+      "all_succeeded": true
+    },
+    "quick": false,
+    "parent_tests_passed": true,
+    "coverage": 0.8625678119349005
   },
   "baseline": {
     "april_top50_wape_seasonal_naive": 0.19296595644565825,
     "completed_trips_flat": 2893951.8293258757,
     "avg_rider_price_flat": 20.000000000000004,
-    "flat_multiplier": 1.0
+    "flat_multiplier": 1.0,
+    "parent_april_top50_wape_lightgbm": 0.14612673860775385,
+    "demand_11m_april_top50_wape_seasonal_naive": 0.19296595644565825,
+    "spec_seasonal_naive_wape": 0.193
   },
   "splits": {
     "zone_hour_panel": {
       "train": 305760,
       "val": 87360,
       "test": 187200
+    },
+    "demand_11m": {
+      "train": 1841616,
+      "val": 87696,
+      "test": 187920
     }
   },
   "seeds": [
@@ -108,7 +203,7 @@
     "gpu": null,
     "python": "3.12.10",
     "os": "Windows-11-10.0.26200-SP0",
-    "peak_rss_gb": 0.4303
+    "peak_rss_gb": 2.1176
   },
-  "runtime_seconds": 5.917
+  "runtime_seconds": 103.08
 }

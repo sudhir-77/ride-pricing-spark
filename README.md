@@ -84,6 +84,12 @@ MLflow logs the training parameters and the March validation WAPE for the top zo
 | Average rider price under optimized surge vs flat pricing | 18.755521 | <= 20.000000 | yes |
 | Switchback analysis 95% CI coverage of the true effect | 0.942000 | >= 0.920000 | yes |
 | Switchback bias vs one third of naive user-level A/B bias | 0.011451 | < 1.598972 | yes |
+| Spark vs. DuckDB feature parity on overlapping months | 1.000000 | >= 1.000000 | yes |
+| Demand WAPE on held-out April 2024 with the 11-month model | 0.145109 | <= 0.146127 | yes |
+| Pipeline throughput | 50.550000 | <= 1800.000000 | yes |
+| Airflow DAG | 1.000000 | >= 1.000000 | yes |
+| Parent project | 0.000000 | <= 0.020000 | yes |
+| Test coverage of src/ and spark/ | 0.862568 | >= 0.750000 | yes |
 
 | Metric | Value |
 |---|---:|
@@ -101,8 +107,14 @@ MLflow logs the training parameters and the March validation WAPE for the top zo
 | Switchback absolute bias | 0.011451 |
 | Naive user-level absolute bias | 4.796915 |
 | Bias ratio (switchback / naive) | 0.002387 |
-| Runtime seconds | 5.92 |
-| Peak RSS GiB | 0.4303 |
+| April top-zone WAPE, 11-month LightGBM | 0.145109 |
+| April top-zone WAPE, 11-month seasonal naive | 0.192966 |
+| Parent April top-zone WAPE | 0.146127 |
+| Spark vs DuckDB match rate | 1.000000 |
+| Spark ETL seconds | 50.55 |
+| Spark total trips | 38419594 |
+| Runtime seconds | 103.08 |
+| Peak RSS GiB | 2.1176 |
 
 Values are fractions (0.25 means 25%), except prices in USD, trip totals, seconds, and GiB.
 This table is written by `python run.py` from `results/metrics.json`.

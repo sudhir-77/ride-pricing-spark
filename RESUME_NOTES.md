@@ -2,18 +2,19 @@
 
 ## Draft bullets
 
-- Forecast NYC zone-hour taxi demand with LightGBM at 0.1461 WAPE on held-out April, versus 0.1930 for a seasonal-naive baseline (relative reduction 0.2427).
-- Built a marketplace simulator and surge-pricing optimizer that raised simulated completed trips by 0.2131 over flat pricing, with average rider price 18.7555 versus 20.0000 under the flat multiplier.
-- Designed switchback experiments that held absolute interference bias to 0.0115 (0.0024 of the naive user-level A/B bias of 4.7969), with 0.9420 coverage of the true effect by nominal 95% CIs across 500 simulations.
+- Built a PySpark ETL over 38419594 NYC taxi trips (12 months) with data-quality checks, matching DuckDB features on 1.0000 of overlapping zone-hour rows.
+- Defined the extract, validate, transform, train, and evaluate steps as an Airflow DAG (5 tasks, statically validated) and ran the same tasks end to end with a local runner.
+- Retrained the demand model on 11 months of history at 0.1451 WAPE on held-out April 2024, versus 0.1930 for seasonal-naive.
+- Re-ran the parent DuckDB and LightGBM pipeline at 0.1461 April top-zone WAPE on the same held-out month.
 
 ## Skills and tools
 
-Python, SQL, DuckDB, pandas, NumPy, LightGBM, SciPy, statsmodels, matplotlib, pytest. Time-series forecasting, marketplace simulation, constrained optimization, and experiment analysis with clustered standard errors.
+Python, SQL, PySpark, DuckDB, Airflow DAG definitions, LightGBM, MLflow, pandas, NumPy, pytest. Local-mode Spark ETL, feature parity checks, time-series forecasting, and static DAG validation with a local runner.
 
 ## Project summary
 
-This project forecasts yellow-taxi pickups by zone and hour, then uses those forecasts as base demand in a small marketplace simulator. A grid search sets a surge multiplier for each zone-hour, and simulated switchback experiments check that a block-randomized analysis recovers the known pricing effect while a user-level A/B test does not.
+This project extends a zone-hour taxi demand model with a local PySpark cleaning and aggregation job over 12 months of TLC yellow trips. An Airflow DAG defines extract, validate, transform, train, and evaluate; a local runner executes those tasks, and the retrained model is scored on held-out April 2024.
 
 ## GitHub description
 
-Forecast NYC taxi zone-hour demand, optimize a simulated surge multiplier, and compare switchback experiments with a user-level A/B test.
+PySpark ETL for a year of NYC taxi trips, checked against DuckDB, with an Airflow DAG and an 11-month demand model.

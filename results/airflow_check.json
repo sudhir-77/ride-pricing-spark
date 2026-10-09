@@ -1,0 +1,13 @@
+{
+  "dag_id": "nyc_taxi_demand",
+  "n_tasks": 5,
+  "task_order": [
+    "extract",
+    "validate",
+    "transform",
+    "train",
+    "evaluate"
+  ],
+  "acyclic": true,
+  "all_succeeded": true
+}
